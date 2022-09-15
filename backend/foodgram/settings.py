@@ -131,4 +131,5 @@ REST_FRAMEWORK = {
 
 DJOSER = {
     'HIDE_USERS': False,
+    'LOGOUT_ON_PASSWORD_CHANGE': True,
 }

@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from djoser.conf import settings
 from djoser.serializers import UserSerializer
+
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
@@ -22,7 +23,10 @@ class CustomUserSerializer(UserSerializer):
         read_only_fields = (settings.LOGIN_FIELD,)
 
     def get_is_subscribed(self, obj):
-        return 'тут сделать инфу о подписке'  # DO IT !
+        current_user = self.context['request'].user
+        if current_user.is_anonymous or current_user == obj:
+            return False
+        return current_user.following.filter(pk=obj.pk).exists()
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):

@@ -27,6 +27,6 @@ class CustomUserViewSet(UserViewSet):
     @action(detail=False)
     def subscriptions(self, request):
         current_user = self.request.user
-        subscriptions = current_user.followers.all()
+        subscriptions = current_user.following.all()
         serializer = self.get_serializer(subscriptions, many=True)
         return Response(serializer.data)

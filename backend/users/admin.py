@@ -10,11 +10,13 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('pk', 'username', 'email', 'first_name',
                     'last_name', 'is_staff')
     list_filter = ('username', 'email')
+    list_editable = ('username', 'email', 'first_name', 'last_name')
 
 
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user_from', 'user_to')
     list_filter = ('user_from', 'user_to')
+    list_editable = ('user_from', 'user_to')
 
 
 admin.site.register(User, UserAdmin)

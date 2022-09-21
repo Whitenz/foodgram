@@ -4,3 +4,4 @@ djoser==2.1.0
 webcolors==1.12
 django-cors-headers==3.13.0
 psycopg2-binary==2.9.3
+Pillow==9.2.0

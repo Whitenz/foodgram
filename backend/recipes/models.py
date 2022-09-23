@@ -9,15 +9,15 @@ class Tag(models.Model):
     name = models.CharField(
         max_length=200,
         db_index=True,
-        unique=True
+        unique=True,
     )
     color = models.CharField(
         max_length=7,
-        unique=True
+        unique=True,
     )
     slug = models.SlugField(
         max_length=200,
-        unique=True
+        unique=True,
     )
 
     class Meta:
@@ -26,16 +26,16 @@ class Tag(models.Model):
         verbose_name_plural = _('tags')
 
     def __str__(self) -> str:
-        return self.slug
+        return self.name
 
 
 class Ingredient(models.Model):
     name = models.CharField(
         max_length=200,
-        db_index=True
+        db_index=True,
     )
     measurement_unit = models.CharField(
-        max_length=200
+        max_length=200,
     )
 
     class Meta:
@@ -50,17 +50,20 @@ class Ingredient(models.Model):
 class Recipe(models.Model):
     tags = models.ManyToManyField(
         Tag,
+        verbose_name=_('tags of the recipe'),
         related_name='recipes',
         through='TagRecipe',
     )
     author = models.ForeignKey(
         User,
         verbose_name=_('author of the recipe'),
+        related_name='recipes',
         on_delete=models.CASCADE,
-        related_name='recipes'
     )
     ingredients = models.ManyToManyField(
         Ingredient,
+        verbose_name=_('ingredients of the recipe'),
+        related_name='recipes',
         through='AmountIngredient'
     )
     name = models.CharField(
@@ -70,13 +73,13 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         verbose_name=_('recipe image'),
-        upload_to='recipes/images/'
+        upload_to='recipes/images/',
     )
     text = models.TextField(
-        verbose_name=_('text description of the recipe')
+        verbose_name=_('text description of the recipe'),
     )
     cooking_time = models.IntegerField(
-        verbose_name=_('cooking time in minutes')
+        verbose_name=_('cooking time in minutes'),
     )
     pub_date = models.DateTimeField(
         verbose_name=_('date of public'),
@@ -95,28 +98,26 @@ class Recipe(models.Model):
 class AmountIngredient(models.Model):
     recipe = models.ForeignKey(
         Recipe,
-        # related_name='ingredients',
         verbose_name=_('recipe'),
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
     ingredient = models.ForeignKey(
         Ingredient,
-        # related_name='amounts',
         verbose_name=_('ingredient'),
         on_delete=models.CASCADE,
     )
     amount = models.PositiveIntegerField(
         verbose_name=_('amount of ingredient for the recipe'),
-        default=1
+        default=1,
     )
 
 
 class TagRecipe(models.Model):
     tag = models.ForeignKey(
         Tag,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
     recipe = models.ForeignKey(
         Recipe,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )

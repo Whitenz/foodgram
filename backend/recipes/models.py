@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -99,17 +100,27 @@ class AmountIngredient(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         verbose_name=_('recipe'),
+        related_name='amount_ingredients',
         on_delete=models.CASCADE,
     )
     ingredient = models.ForeignKey(
         Ingredient,
         verbose_name=_('ingredient'),
+        related_name='amount_ingredients',
         on_delete=models.CASCADE,
     )
-    amount = models.PositiveIntegerField(
+    amount = models.PositiveSmallIntegerField(
         verbose_name=_('amount of ingredient for the recipe'),
-        default=1,
+        validators=(MinValueValidator(1),)
     )
+
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=('ingredient', 'recipe'),
+                name='unique_amount_ingredient'
+            ),
+        )
 
 
 class TagRecipe(models.Model):

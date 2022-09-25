@@ -8,15 +8,18 @@ User = get_user_model()
 
 class Tag(models.Model):
     name = models.CharField(
+        verbose_name=_('tag name'),
         max_length=200,
         db_index=True,
         unique=True,
     )
     color = models.CharField(
+        verbose_name=_('tag colors'),
         max_length=7,
         unique=True,
     )
     slug = models.SlugField(
+        verbose_name=_('slug of the tag'),
         max_length=200,
         unique=True,
     )
@@ -26,16 +29,18 @@ class Tag(models.Model):
         verbose_name = _('tag')
         verbose_name_plural = _('tags')
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
 
 class Ingredient(models.Model):
     name = models.CharField(
+        verbose_name=_('ingredient name'),
         max_length=200,
         db_index=True,
     )
     measurement_unit = models.CharField(
+        verbose_name=_('ingredient measurement measure'),
         max_length=200,
     )
 
@@ -44,14 +49,14 @@ class Ingredient(models.Model):
         verbose_name = _('ingredient')
         verbose_name_plural = _('ingredients')
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
 
 class Recipe(models.Model):
     tags = models.ManyToManyField(
         Tag,
-        verbose_name=_('tags of the recipe'),
+        verbose_name=_('recipe tags'),
         related_name='recipes',
         through='TagRecipe',
     )
@@ -63,7 +68,7 @@ class Recipe(models.Model):
     )
     ingredients = models.ManyToManyField(
         Ingredient,
-        verbose_name=_('ingredients of the recipe'),
+        verbose_name=_('recipe ingredients'),
         related_name='recipes',
         through='AmountIngredient'
     )
@@ -77,10 +82,11 @@ class Recipe(models.Model):
         upload_to='recipes/images/',
     )
     text = models.TextField(
-        verbose_name=_('text description of the recipe'),
+        verbose_name=_('recipe description'),
     )
-    cooking_time = models.IntegerField(
+    cooking_time = models.PositiveSmallIntegerField(
         verbose_name=_('cooking time in minutes'),
+        validators=(MinValueValidator(1),)
     )
     pub_date = models.DateTimeField(
         verbose_name=_('date of public'),
@@ -92,7 +98,7 @@ class Recipe(models.Model):
         verbose_name = _('recipe')
         verbose_name_plural = _('recipes')
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
 
@@ -117,9 +123,15 @@ class AmountIngredient(models.Model):
     class Meta:
         constraints = (
             models.UniqueConstraint(
-                fields=('ingredient', 'recipe'),
-                name='unique_amount_ingredient'
+                        fields=('recipe', 'ingredient'),
+                name='unique_recipe_ingredient'
             ),
+        )
+
+    def __str__(self):
+        return (
+            f'{self.recipe.name}: {self.ingredient.name} {self.amount}'
+            f'{self.ingredient.measurement_unit}'
         )
 
 
@@ -132,3 +144,11 @@ class TagRecipe(models.Model):
         Recipe,
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=('tag', 'recipe'),
+                name='unique_tag_recipe'
+            ),
+        )

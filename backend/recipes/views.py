@@ -2,8 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
 from .models import Ingredient, Recipe, Tag
-from .serializers import (RecipeReadSerializer, RecipeWriteSerializer,
-                          TagSerializer, IngredientSerializer)
+from .serializers import (IngredientSerializer, RecipeSerializer, TagSerializer)
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -20,14 +19,14 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    serializer_class = RecipeReadSerializer
+    serializer_class = RecipeSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
     http_method_names = ('get', 'post', 'patch', 'delete')
 
-    def get_serializer_class(self):
-        if self.action in ('create', 'partial_update'):
-            return RecipeWriteSerializer
-        return self.serializer_class
+    # def get_serializer_class(self):
+    #     if self.action in ('create', 'partial_update'):
+    #         return RecipeWriteSerializer
+    #     return self.serializer_class
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

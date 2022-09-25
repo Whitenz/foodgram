@@ -123,7 +123,7 @@ class AmountIngredient(models.Model):
     class Meta:
         constraints = (
             models.UniqueConstraint(
-                        fields=('recipe', 'ingredient'),
+                fields=('recipe', 'ingredient'),
                 name='unique_recipe_ingredient'
             ),
         )
@@ -150,5 +150,51 @@ class TagRecipe(models.Model):
             models.UniqueConstraint(
                 fields=('tag', 'recipe'),
                 name='unique_tag_recipe'
+            ),
+        )
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        User,
+        verbose_name=_('user'),
+        related_name='favorites',
+        on_delete=models.CASCADE,
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        verbose_name=_('favorite recipe'),
+        related_name='favorites',
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=('user', 'recipe'),
+                name='unique_favorite_recipe'
+            ),
+        )
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(
+        User,
+        verbose_name=_('user'),
+        related_name='cart',
+        on_delete=models.CASCADE,
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        verbose_name=_('user shopping cart'),
+        related_name='cart',
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=('user', 'recipe'),
+                name='unique_cart_recipe'
             ),
         )

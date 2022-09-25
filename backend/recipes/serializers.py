@@ -75,8 +75,24 @@ class RecipeSerializer(serializers.ModelSerializer):
         add_ingredients_to_recipe(recipe, ingredients)
         return recipe
 
-    def update(self, instance, validated_data):
-        pass
+    def update(self, recipe, validated_data):
+        recipe.cooking_time = validated_data.get(
+            'cooking_time', recipe.cooking_time
+        )
+        recipe.name = validated_data.get('name', recipe.name)
+        recipe.image = validated_data.get('image', recipe.image)
+        recipe.text = validated_data.get('text', recipe.text)
+
+        tags = validated_data.get('tags', recipe.tags)
+        ingredients = validated_data.get(
+            'amount_ingredients', recipe.amount_ingredients
+        )
+        recipe.tags.set(tags)
+        recipe.ingredients.clear()
+        add_ingredients_to_recipe(recipe, ingredients)
+
+        recipe.save()
+        return recipe
 
     def get_is_favorited(self, obj):
         return 'проверка на избранное'

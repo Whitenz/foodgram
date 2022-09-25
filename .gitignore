@@ -130,3 +130,9 @@ dmypy.json
 
 # .idea
 .idea
+
+# media and static files of django project
+static/
+.static
+media/
+.media

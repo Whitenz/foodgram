@@ -43,6 +43,7 @@ class AmountIngredientSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
+    author = CustomUserSerializer(read_only=True)
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
         many=True,
@@ -52,9 +53,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         many=True,
     )
     image = Base64ImageField()
-    author = CustomUserSerializer(read_only=True)
-    is_favorited = serializers.SerializerMethodField(read_only=True)
-    is_in_shopping_cart = serializers.SerializerMethodField(read_only=True)
+    is_favorited = serializers.SerializerMethodField()
+    is_in_shopping_cart = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
@@ -74,6 +74,9 @@ class RecipeSerializer(serializers.ModelSerializer):
         recipe.tags.set(tags)
         add_ingredients_to_recipe(recipe, ingredients)
         return recipe
+
+    def update(self, instance, validated_data):
+        pass
 
     def get_is_favorited(self, obj):
         return 'проверка на избранное'

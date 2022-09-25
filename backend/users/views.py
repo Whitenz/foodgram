@@ -69,6 +69,6 @@ class CustomUserViewSet(UserViewSet):
             subscription.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(
-            data=subscription_errors.get('not_signed'),
+            data=subscription_errors.get('not_exist'),
             status=status.HTTP_400_BAD_REQUEST
         )

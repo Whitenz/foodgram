@@ -99,3 +99,9 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_is_in_shopping_cart(self, obj):
         return 'проверка на наличие в корзине'
+
+
+class ShortViewRecipeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = 'id', 'name', 'image', 'cooking_time'

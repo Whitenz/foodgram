@@ -8,7 +8,7 @@ subscription_errors = {
     'already_exists': {
         name_of_error_field: 'Вы уже оформили подписку на этого пользователя.'
     },
-    'not_signed': {
+    'not_exist': {
         name_of_error_field: 'Вы не подписаны на этого пользователя.'
-    }
+    },
 }

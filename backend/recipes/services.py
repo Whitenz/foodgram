@@ -1,4 +1,5 @@
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
 from .models import AmountIngredient
 
@@ -20,3 +21,24 @@ def add_ingredients_to_recipe(recipe, ingredients):
             ingredient=ingredient,
             amount=amount
         )
+
+
+def add_recipe_to_linked_model(recipe, linked_model, user, serializer, errors):
+    obj, created = linked_model.objects.get_or_create(user=user,
+                                                      recipe=recipe)
+    if created:
+        return Response(data=serializer.data,
+                        status=status.HTTP_201_CREATED)
+
+    return Response(data=errors.get('already_exists'),
+                    status=status.HTTP_400_BAD_REQUEST)
+
+
+def del_recipe_from_linked_model(recipe, linked_model, user, errors):
+    obj = linked_model.objects.filter(user=user, recipe=recipe).first()
+    if obj:
+        obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    return Response(data=errors.get('not_exist'),
+                    status=status.HTTP_400_BAD_REQUEST)

@@ -6,6 +6,15 @@ favorite_errors = {
         name_of_error_field: 'Вы уже добавили этот рецепт в избранное.'
     },
     'not_exist': {
-        name_of_error_field: 'Вы не добавляли этот рецепт в избранное.'
+        name_of_error_field: 'Этого рецепта нет в вашем избранном.'
+    },
+}
+
+cart_errors = {
+    'already_exists': {
+        name_of_error_field: 'Вы уже добавили этот рецепт в корзину.'
+    },
+    'not_exist': {
+        name_of_error_field: 'Этого рецепта нет в вашей корзине.'
     },
 }

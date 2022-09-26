@@ -1,14 +1,13 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
 
-from .conf import favorite_errors
-from .models import Favorite, Ingredient, Recipe, Tag
+from .conf import cart_errors, favorite_errors
+from .models import Cart, Favorite, Ingredient, Recipe, Tag
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (IngredientSerializer, RecipeSerializer,
                           ShortViewRecipeSerializer, TagSerializer)
+from .services import add_recipe_to_linked_model, del_recipe_from_linked_model
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -29,11 +28,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthorOrReadOnly,)
     http_method_names = ('get', 'post', 'patch', 'delete')
 
-    # def get_serializer_class(self):
-    #     if self.action in ('create', 'partial_update'):
-    #         return RecipeWriteSerializer
-    #     return self.serializer_class
-
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
@@ -42,33 +36,39 @@ class RecipeViewSet(viewsets.ModelViewSet):
             permission_classes=(IsAuthenticated,),
             serializer_class=ShortViewRecipeSerializer)
     def favorite(self, request, pk=None):
-        user = request.user
-        recipe = get_object_or_404(Recipe, pk=pk)
-
         if request.method == 'POST':
-            favorite, created = Favorite.objects.get_or_create(
-                user=user,
-                recipe=recipe
+            return add_recipe_to_linked_model(
+                recipe=self.get_object(),
+                user=self.request.user,
+                linked_model=Favorite,
+                serializer=self.get_serializer(self.get_object()),
+                errors=favorite_errors
             )
-            if created:
-                serializer = self.get_serializer(recipe)
-                return Response(
-                    data=serializer.data,
-                    status=status.HTTP_201_CREATED
-                )
-            return Response(
-                data=favorite_errors.get('already_exists'),
-                status=status.HTTP_400_BAD_REQUEST
+        elif request.method == 'DELETE':
+            return del_recipe_from_linked_model(
+                recipe=self.get_object(),
+                user=self.request.user,
+                linked_model=Favorite,
+                errors=favorite_errors
             )
 
-        favorite = Favorite.objects.filter(
-            user=user,
-            recipe=recipe
-        ).first()
-        if favorite:
-            favorite.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(
-            data=favorite_errors.get('not_exist'),
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    @action(detail=True,
+            methods=['post', 'delete'],
+            permission_classes=(IsAuthenticated,),
+            serializer_class=ShortViewRecipeSerializer)
+    def shopping_cart(self, request, pk=None):
+        if request.method == 'POST':
+            return add_recipe_to_linked_model(
+                recipe=self.get_object(),
+                user=self.request.user,
+                linked_model=Cart,
+                serializer=self.get_serializer(self.get_object()),
+                errors=cart_errors
+            )
+        elif request.method == 'DELETE':
+            return del_recipe_from_linked_model(
+                recipe=self.get_object(),
+                user=self.request.user,
+                linked_model=Cart,
+                errors=cart_errors
+            )

@@ -6,7 +6,7 @@ from .conf import cart_errors, favorite_errors
 from .models import Cart, Favorite, Ingredient, Recipe, Tag
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (IngredientSerializer, RecipeSerializer,
-                          ShortViewRecipeSerializer, TagSerializer)
+                          ShortRecipeSerializer, TagSerializer)
 from .services import add_recipe_to_linked_model, del_recipe_from_linked_model
 
 
@@ -34,7 +34,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=True,
             methods=['post', 'delete'],
             permission_classes=(IsAuthenticated,),
-            serializer_class=ShortViewRecipeSerializer)
+            serializer_class=ShortRecipeSerializer)
     def favorite(self, request, pk=None):
         if request.method == 'POST':
             return add_recipe_to_linked_model(
@@ -44,18 +44,17 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 serializer=self.get_serializer(self.get_object()),
                 errors=favorite_errors
             )
-        elif request.method == 'DELETE':
-            return del_recipe_from_linked_model(
-                recipe=self.get_object(),
-                user=self.request.user,
-                linked_model=Favorite,
-                errors=favorite_errors
-            )
+        return del_recipe_from_linked_model(
+            recipe=self.get_object(),
+            user=self.request.user,
+            linked_model=Favorite,
+            errors=favorite_errors
+        )
 
     @action(detail=True,
             methods=['post', 'delete'],
             permission_classes=(IsAuthenticated,),
-            serializer_class=ShortViewRecipeSerializer)
+            serializer_class=ShortRecipeSerializer)
     def shopping_cart(self, request, pk=None):
         if request.method == 'POST':
             return add_recipe_to_linked_model(
@@ -65,10 +64,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 serializer=self.get_serializer(self.get_object()),
                 errors=cart_errors
             )
-        elif request.method == 'DELETE':
-            return del_recipe_from_linked_model(
-                recipe=self.get_object(),
-                user=self.request.user,
-                linked_model=Cart,
-                errors=cart_errors
-            )
+        return del_recipe_from_linked_model(
+            recipe=self.get_object(),
+            user=self.request.user,
+            linked_model=Cart,
+            errors=cart_errors
+        )

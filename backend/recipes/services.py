@@ -13,14 +13,12 @@ def check_unique_ingredient(ingredients):
 
 
 def add_ingredients_to_recipe(recipe, ingredients):
-    for amount_ingredient in ingredients:
-        ingredient = amount_ingredient.get('id')
-        amount = amount_ingredient.get('amount')
-        AmountIngredient.objects.get_or_create(
-            recipe=recipe,
-            ingredient=ingredient,
-            amount=amount
-        )
+    objs = []
+    for ingredient in ingredients:
+        objs.append(AmountIngredient(recipe=recipe,
+                                     ingredient=ingredient.get('id'),
+                                     amount=ingredient.get('amount')))
+    AmountIngredient.objects.bulk_create(objs)
 
 
 def add_recipe_to_linked_model(recipe, linked_model, user, serializer, errors):

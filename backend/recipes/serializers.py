@@ -1,11 +1,15 @@
 import base64
 
+from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
+from djoser.conf import settings
 from rest_framework import serializers
 
 from users.serializers import CustomUserSerializer
 from recipes.models import Ingredient, Recipe, Tag, AmountIngredient
 from .services import add_ingredients_to_recipe, check_unique_ingredient
+
+User = get_user_model()
 
 
 class Base64ImageField(serializers.ImageField):
@@ -95,13 +99,37 @@ class RecipeSerializer(serializers.ModelSerializer):
         return recipe
 
     def get_is_favorited(self, obj):
-        return 'проверка на избранное'
+        current_user = self.context['request'].user
+        if current_user.is_anonymous:
+            return False
+        return current_user.favorites.filter(recipe=obj).exists()
 
     def get_is_in_shopping_cart(self, obj):
-        return 'проверка на наличие в корзине'
+        current_user = self.context['request'].user
+        if current_user.is_anonymous:
+            return False
+        return current_user.cart.filter(recipe=obj).exists()
 
 
-class ShortViewRecipeSerializer(serializers.ModelSerializer):
+class ShortRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = 'id', 'name', 'image', 'cooking_time'
+
+
+class RecipeSubscriptionSerializer(CustomUserSerializer):
+    recipes = ShortRecipeSerializer(many=True, read_only=True)
+    recipes_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = tuple(User.REQUIRED_FIELDS) + (
+            settings.USER_ID_FIELD,
+            settings.LOGIN_FIELD,
+            'is_subscribed',
+            'recipes',
+            'recipes_count',
+        )
+
+    def get_recipes_count(self, obj):
+        return obj.recipes.count()

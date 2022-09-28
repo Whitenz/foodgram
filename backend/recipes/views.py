@@ -1,9 +1,13 @@
+import datetime
+
+from django.db.models import Sum
+from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .conf import cart_errors, favorite_errors
-from .models import Cart, Favorite, Ingredient, Recipe, Tag
+from .models import AmountIngredient, Cart, Favorite, Ingredient, Recipe, Tag
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (IngredientSerializer, RecipeSerializer,
                           ShortRecipeSerializer, TagSerializer)
@@ -70,3 +74,27 @@ class RecipeViewSet(viewsets.ModelViewSet):
             linked_model=Cart,
             errors=cart_errors
         )
+
+    @action(detail=False, permission_classes=(IsAuthenticated,))
+    def download_shopping_cart(self, request):
+        user = request.user
+        ingredients = AmountIngredient.objects.filter(recipe__cart__user=user)
+        shopping_list = ingredients.values(
+            'ingredient__name',
+            'ingredient__measurement_unit'
+        ).annotate(amount=Sum('amount')).order_by('ingredient__name')
+
+        current_date = datetime.date.today().strftime('%d_%m_%Y')
+        content = (f'Список покупок для {user.get_full_name()}'
+                   f' от {current_date}\n')
+        content += '\n'.join(
+            (f"{_.get('ingredient__name')} - "
+             f"{_.get('amount')} {_.get('ingredient__measurement_unit')}"
+             ) for _ in shopping_list
+        )
+        filename = f'{user}_shopping_list_{current_date}.txt'
+
+        response = HttpResponse(content, content_type='text.txt; charset=utf-8')
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+
+        return response

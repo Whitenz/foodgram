@@ -45,6 +45,11 @@ class AmountIngredientSerializer(serializers.ModelSerializer):
         model = AmountIngredient
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['id'] = instance.ingredient.id
+        return data
+
 
 class RecipeSerializer(serializers.ModelSerializer):
     author = CustomUserSerializer(read_only=True)

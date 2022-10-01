@@ -75,6 +75,12 @@ class RecipeSerializer(serializers.ModelSerializer):
             'is_in_shopping_cart', 'name', 'image', 'text', 'cooking_time'
         )
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['tags'] = TagSerializer(instance.tags.all(), many=True).data
+        return data
+
+
     def validate_ingredients(self, value):
         check_unique_ingredient(value)
         return value

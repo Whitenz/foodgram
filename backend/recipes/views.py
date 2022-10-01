@@ -2,12 +2,15 @@ import datetime
 
 from django.db.models import Sum
 from django.http import HttpResponse
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .conf import cart_errors, favorite_errors
+from .filters import IngredientFilter, RecipeFilter
 from .models import AmountIngredient, Cart, Favorite, Ingredient, Recipe, Tag
+from .paginators import CustomLimitPagination
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (IngredientSerializer, RecipeSerializer,
                           ShortRecipeSerializer, TagSerializer)
@@ -24,6 +27,8 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (AllowAny,)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = IngredientFilter
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -31,6 +36,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
     serializer_class = RecipeSerializer
     permission_classes = (IsAuthorOrReadOnly,)
     http_method_names = ('get', 'post', 'patch', 'delete')
+    pagination_class = CustomLimitPagination
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = RecipeFilter
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -58,7 +66,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=True,
             methods=['post', 'delete'],
             permission_classes=(IsAuthenticated,),
-            serializer_class=ShortRecipeSerializer)
+            serializer_class=ShortRecipeSerializer,
+            pagination_class=CustomLimitPagination)
     def shopping_cart(self, request, pk=None):
         if request.method == 'POST':
             return add_recipe_to_linked_model(

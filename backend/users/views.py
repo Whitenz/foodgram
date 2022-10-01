@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from recipes.serializers import RecipeSubscriptionSerializer
 from .conf import subscription_errors
 from .models import Subscription
+from .paginators import CustomLimitPagination
 from .serializers import CustomUserSerializer
 from .services import add_subscribe_to_user, del_subscribe_to_user
 
@@ -17,6 +18,7 @@ User = get_user_model()
 class CustomUserViewSet(UserViewSet):
     serializer_class = CustomUserSerializer
     http_method_names = ('get', 'post', 'delete')
+    pagination_class = CustomLimitPagination
 
     def get_permissions(self):
         if self.action in ('list', 'retrieve'):
@@ -34,6 +36,11 @@ class CustomUserViewSet(UserViewSet):
     def subscriptions(self, request):
         current_user = self.get_instance()
         subscriptions = current_user.following.all()
+
+        page = self.paginate_queryset(subscriptions)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(subscriptions, many=True)
         return Response(serializer.data)
 

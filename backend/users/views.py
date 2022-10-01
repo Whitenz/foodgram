@@ -1,16 +1,17 @@
+from djoser.views import UserViewSet
+
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from djoser.views import UserViewSet
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from recipes.serializers import RecipeSubscriptionSerializer
 from .conf import subscription_errors
 from .models import Subscription
 from .paginators import CustomLimitPagination
 from .serializers import CustomUserSerializer
 from .services import add_subscribe_to_user, del_subscribe_to_user
+from recipes.serializers import RecipeSubscriptionSerializer
 
 User = get_user_model()
 
@@ -56,7 +57,7 @@ class CustomUserViewSet(UserViewSet):
             return add_subscribe_to_user(
                 user_from=user_from,
                 user_to=user_to,
-                linked_model=Subscription,
+                model=Subscription,
                 serializer=self.get_serializer(user_to),
                 errors=subscription_errors
             )
@@ -64,6 +65,6 @@ class CustomUserViewSet(UserViewSet):
         return del_subscribe_to_user(
             user_from=user_from,
             user_to=user_to,
-            linked_model=Subscription,
+            model=Subscription,
             errors=subscription_errors
         )

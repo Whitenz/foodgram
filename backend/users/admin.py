@@ -9,6 +9,7 @@ User = get_user_model()
 class UserAdmin(admin.ModelAdmin):
     list_display = ('pk', 'username', 'email', 'first_name',
                     'last_name', 'is_staff')
+    search_fields = ('username', 'first_name', 'last_name')
     list_filter = ('username', 'email')
     list_editable = ('username', 'email', 'first_name', 'last_name')
 

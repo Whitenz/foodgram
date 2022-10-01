@@ -1,20 +1,20 @@
 import base64
 
+from djoser.conf import settings
+
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
-from djoser.conf import settings
 from rest_framework import serializers
 
-from users.serializers import CustomUserSerializer
-from recipes.models import Ingredient, Recipe, Tag, AmountIngredient
+from .models import AmountIngredient, Ingredient, Recipe, Tag
 from .services import add_ingredients_to_recipe, check_unique_ingredient
+from users.serializers import CustomUserSerializer
 
 User = get_user_model()
 
 
 class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
-
         if isinstance(data, str) and data.startswith('data:image'):
             user = self.context['request'].user
             format, imgstr = data.split(';base64,')
@@ -126,7 +126,7 @@ class ShortRecipeSerializer(serializers.ModelSerializer):
 
 
 class RecipeSubscriptionSerializer(CustomUserSerializer):
-    recipes = ShortRecipeSerializer(many=True, read_only=True)
+    recipes = serializers.SerializerMethodField()
     recipes_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -138,6 +138,13 @@ class RecipeSubscriptionSerializer(CustomUserSerializer):
             'recipes',
             'recipes_count',
         )
+
+    def get_recipes(self, obj):
+        recipes = obj.recipes.all()
+        limit = self.context['request'].query_params.get('recipes_limit')
+        if limit is not None and limit.isdigit():
+            recipes = recipes[:int(limit)]
+        return ShortRecipeSerializer(recipes, many=True).data
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()

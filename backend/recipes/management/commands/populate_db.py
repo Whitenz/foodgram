@@ -27,4 +27,3 @@ class Command(BaseCommand):
             self.stdout.write(
                 f'Записей после вставки: {Ingredient.objects.all().count()}'
             )
-

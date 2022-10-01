@@ -103,7 +103,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
         filename = f'{user}_shopping_list_{current_date}.txt'
 
-        response = HttpResponse(content, content_type='text.txt; charset=utf-8')
+        response = HttpResponse(content,
+                                content_type='text.txt; charset=utf-8')
         response['Content-Disposition'] = f'attachment; filename={filename}'
 
         return response

@@ -101,6 +101,11 @@ class Recipe(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def favorites_counter(self):
+        """Возвращает количество добавлений в избранное."""
+        return self.favorites.count()
+
 
 class AmountIngredient(models.Model):
     recipe = models.ForeignKey(

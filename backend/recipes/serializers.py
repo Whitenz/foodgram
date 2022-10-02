@@ -80,7 +80,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         data['tags'] = TagSerializer(instance.tags.all(), many=True).data
         return data
 
-
     def validate_ingredients(self, value):
         check_unique_ingredient(value)
         return value
@@ -112,17 +111,17 @@ class RecipeSerializer(serializers.ModelSerializer):
         recipe.save()
         return recipe
 
-    def get_is_favorited(self, obj):
+    def get_is_favorited(self, recipe):
         current_user = self.context['request'].user
-        if current_user.is_anonymous:
-            return False
-        return current_user.favorites.filter(recipe=obj).exists()
+        return current_user.is_authenticated and (
+            current_user.favorites.filter(recipe=recipe).exists()
+        )
 
-    def get_is_in_shopping_cart(self, obj):
+    def get_is_in_shopping_cart(self, recipe):
         current_user = self.context['request'].user
-        if current_user.is_anonymous:
-            return False
-        return current_user.cart.filter(recipe=obj).exists()
+        return current_user.is_authenticated and (
+            current_user.cart.filter(recipe=recipe).exists()
+        )
 
 
 class ShortRecipeSerializer(serializers.ModelSerializer):
@@ -145,12 +144,12 @@ class RecipeSubscriptionSerializer(CustomUserSerializer):
             'recipes_count',
         )
 
-    def get_recipes(self, obj):
-        recipes = obj.recipes.all()
+    def get_recipes(self, user):
+        recipes = user.recipes.all()
         limit = self.context['request'].query_params.get('recipes_limit')
         if limit is not None and limit.isdigit():
             recipes = recipes[:int(limit)]
         return ShortRecipeSerializer(recipes, many=True).data
 
-    def get_recipes_count(self, obj):
-        return obj.recipes.count()
+    def get_recipes_count(self, user):
+        return user.recipes.count()

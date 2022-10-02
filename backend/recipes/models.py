@@ -3,6 +3,8 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from recipes.validators import HexValidator
+
 User = get_user_model()
 
 
@@ -17,6 +19,7 @@ class Tag(models.Model):
         verbose_name=_('tag colors'),
         max_length=7,
         unique=True,
+        validators=(HexValidator(length=7),),
     )
     slug = models.SlugField(
         verbose_name=_('slug of the tag'),

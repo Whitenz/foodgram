@@ -5,9 +5,9 @@ from django.utils.translation import gettext_lazy as _
 
 class CustomUser(AbstractUser):
     """
-    Кастомная модель пользователя.
-    Модель имеет обязательные атрибуты first_name, last_name, email. email
-    должен быть уникальным.
+    Custom user model.
+    The model has the required attributes first_name, last_name, email. email
+     must be unique.
     """
 
     first_name = models.CharField(_('first name'), max_length=150)
@@ -34,9 +34,9 @@ class CustomUser(AbstractUser):
 
 class Subscription(models.Model):
     """
-    Модель для оформления подписок одного пользователя на другого.
-    Используется в качестве промежуточной модели: user_from - пользователь
-     оформивший подписку, user_to - на кого подписка.
+    A model for making subscriptions from one user to another.
+    Used as an intermediate model: user_from - user who subscribed,
+     user_to - who the subscription is for.
     """
     user_from = models.ForeignKey(
         CustomUser,
@@ -62,4 +62,4 @@ class Subscription(models.Model):
         )
 
     def __str__(self) -> str:
-        return f'Подписка {self.user_from} на {self.user_to}'
+        return _('Subscription {} to {}').format(self.user_from, self.user_to)

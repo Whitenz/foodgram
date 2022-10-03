@@ -9,6 +9,11 @@ User = get_user_model()
 
 
 class Tag(models.Model):
+    """
+    Model for recipe tags.
+    The model stores information about a name and color of the recipe tag in
+     HEX-format, which is used to display the recipe label.
+    """
     name = models.CharField(
         verbose_name=_('tag name'),
         max_length=200,
@@ -37,6 +42,11 @@ class Tag(models.Model):
 
 
 class Ingredient(models.Model):
+    """
+    Model for recipe ingredient.
+    The model stores information about a name and measurement unit and is
+     used to create a recipe.
+    """
     name = models.CharField(
         verbose_name=_('ingredient name'),
         max_length=200,
@@ -57,6 +67,12 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
+    """
+    Model for recipe.
+    The model stores information about an author, name, image, tags, cooking
+     time, text description and ingredients for recipe. One recipe can have
+     several tags and ingredients through M2M-field.
+    """
     tags = models.ManyToManyField(
         Tag,
         verbose_name=_('recipe tags'),
@@ -106,11 +122,15 @@ class Recipe(models.Model):
 
     @property
     def favorites_counter(self):
-        """Возвращает количество добавлений в избранное."""
+        """Return how many times a recipe has benn added to favorites."""
         return self.favorites.count()
 
 
 class AmountIngredient(models.Model):
+    """
+    Model for amount ingredient in recipe.
+    The model stores information about a recipe, ingredient and their amount.
+    """
     recipe = models.ForeignKey(
         Recipe,
         verbose_name=_('recipe'),
@@ -129,6 +149,8 @@ class AmountIngredient(models.Model):
     )
 
     class Meta:
+        verbose_name = _('amount of ingredients')
+        verbose_name_plural = _('amount of ingredients')
         constraints = (
             models.UniqueConstraint(
                 fields=('recipe', 'ingredient'),
@@ -144,16 +166,21 @@ class AmountIngredient(models.Model):
 
 
 class TagRecipe(models.Model):
+    """An intermediate model for linking a tag and a recipe."""
     tag = models.ForeignKey(
         Tag,
+        verbose_name=_('tag'),
         on_delete=models.CASCADE,
     )
     recipe = models.ForeignKey(
         Recipe,
+        verbose_name=_('recipe'),
         on_delete=models.CASCADE,
     )
 
     class Meta:
+        verbose_name = _('tags of recipe')
+        verbose_name_plural = _('tags of recipe')
         constraints = (
             models.UniqueConstraint(
                 fields=('tag', 'recipe'),
@@ -163,6 +190,10 @@ class TagRecipe(models.Model):
 
 
 class Favorite(models.Model):
+    """
+    Model for favorite recipes.
+    The model stores information about a user and him favorites recipe.
+    """
     user = models.ForeignKey(
         User,
         verbose_name=_('user'),
@@ -171,12 +202,14 @@ class Favorite(models.Model):
     )
     recipe = models.ForeignKey(
         Recipe,
-        verbose_name=_('favorite recipe'),
+        verbose_name=_('favorite recipes'),
         related_name='favorites',
         on_delete=models.CASCADE,
     )
 
     class Meta:
+        verbose_name = _('favorite')
+        verbose_name_plural = _('favorite')
         constraints = (
             models.UniqueConstraint(
                 fields=('user', 'recipe'),
@@ -186,6 +219,10 @@ class Favorite(models.Model):
 
 
 class Cart(models.Model):
+    """
+    Model for ingredients from recipes.
+    The model stores information about a user and his favorite recipes.
+    """
     user = models.ForeignKey(
         User,
         verbose_name=_('user'),
@@ -200,6 +237,8 @@ class Cart(models.Model):
     )
 
     class Meta:
+        verbose_name = _('shopping cart')
+        verbose_name_plural = _('shopping cart')
         constraints = (
             models.UniqueConstraint(
                 fields=('user', 'recipe'),

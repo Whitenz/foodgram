@@ -6,11 +6,9 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from .conf import subscription_errors
-from .models import Subscription
 from .paginators import CustomLimitPagination
 from .serializers import CustomUserSerializer
-from .services import add_subscribe_to_user, del_subscribe_to_user
+from .utils import add_subscribe_to_user, del_subscribe_to_user
 from recipes.serializers import RecipeSubscriptionSerializer
 
 User = get_user_model()
@@ -57,14 +55,10 @@ class CustomUserViewSet(UserViewSet):
             return add_subscribe_to_user(
                 user_from=user_from,
                 user_to=user_to,
-                model=Subscription,
-                serializer=self.get_serializer(user_to),
-                errors=subscription_errors
+                serializer=self.get_serializer(user_to)
             )
 
         return del_subscribe_to_user(
             user_from=user_from,
-            user_to=user_to,
-            model=Subscription,
-            errors=subscription_errors
+            user_to=user_to
         )

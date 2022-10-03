@@ -98,6 +98,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOCALE_PATHS = [
+    BASE_DIR / 'conf/locale',
+]
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / STATIC_URL

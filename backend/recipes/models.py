@@ -124,6 +124,7 @@ class Recipe(models.Model):
     def favorites_counter(self):
         """Return how many times a recipe has benn added to favorites."""
         return self.favorites.count()
+    favorites_counter.fget.short_description = _('number in favorites')
 
 
 class AmountIngredient(models.Model):

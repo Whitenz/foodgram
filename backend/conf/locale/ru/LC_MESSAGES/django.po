@@ -1,0 +1,187 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-03 23:22+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: recipes/models.py:18
+msgid "tag name"
+msgstr "имя тега"
+
+#: recipes/models.py:24
+msgid "tag colors"
+msgstr "цвет тега"
+
+#: recipes/models.py:30
+msgid "slug of the tag"
+msgstr "слаг тега"
+
+#: recipes/models.py:37 recipes/models.py:172
+msgid "tag"
+msgstr "тег"
+
+#: recipes/models.py:38
+msgid "tags"
+msgstr "теги"
+
+#: recipes/models.py:51
+msgid "ingredient name"
+msgstr "название ингредиента"
+
+#: recipes/models.py:56
+msgid "ingredient measurement measure"
+msgstr "единица измерения ингредиента"
+
+#: recipes/models.py:62 recipes/models.py:142
+msgid "ingredient"
+msgstr "ингредиент"
+
+#: recipes/models.py:63
+msgid "ingredients"
+msgstr "ингредиенты"
+
+#: recipes/models.py:78
+msgid "recipe tags"
+msgstr "теги рецепта"
+
+#: recipes/models.py:84
+msgid "author of the recipe"
+msgstr "автор рецепта"
+
+#: recipes/models.py:90
+msgid "recipe ingredients"
+msgstr "ингредиенты рецепта"
+
+#: recipes/models.py:95
+msgid "recipe name"
+msgstr "имя рецепта"
+
+#: recipes/models.py:100
+msgid "recipe image"
+msgstr "изображение рецепта"
+
+#: recipes/models.py:104
+msgid "recipe description"
+msgstr "описание рецепта"
+
+#: recipes/models.py:107
+msgid "cooking time in minutes"
+msgstr "время приготовления в минутах"
+
+#: recipes/models.py:111
+msgid "date of public"
+msgstr "дата публикации"
+
+#: recipes/models.py:117 recipes/models.py:136 recipes/models.py:177
+msgid "recipe"
+msgstr "рецепт"
+
+#: recipes/models.py:118
+msgid "recipes"
+msgstr "рецепты"
+
+#: recipes/models.py:127
+msgid "number in favorites"
+msgstr "количество в избранном"
+
+#: recipes/models.py:147
+msgid "amount of ingredient for the recipe"
+msgstr "количество ингредиентов для рецепта"
+
+#: recipes/models.py:152 recipes/models.py:153
+msgid "amount of ingredients"
+msgstr "количество ингредиентов"
+
+#: recipes/models.py:182 recipes/models.py:183
+msgid "tags of recipe"
+msgstr "теги рецепта"
+
+#: recipes/models.py:205
+msgid "favorite recipes"
+msgstr "избранные рецепты"
+
+#: recipes/models.py:211 recipes/models.py:212
+msgid "favorite"
+msgstr "избранное"
+
+#: recipes/models.py:234
+msgid "user shopping cart"
+msgstr "список покупок пользователя"
+
+#: recipes/models.py:240 recipes/models.py:241
+msgid "shopping cart"
+msgstr "список покупок"
+
+#: recipes/utils.py:18
+msgid "Ingredients should not be repeated."
+msgstr "Ингредиенты не должны повторяться."
+
+#: recipes/utils.py:36
+msgid "You have already added this recipe."
+msgstr "Вы уже добавили этот рецепт."
+
+#: recipes/utils.py:47
+msgid "You did not add this recipe."
+msgstr "Вы не добавляли этот рецепт."
+
+#: recipes/utils.py:63
+msgid ""
+"Shopping list for {} - {}\n"
+"\n"
+msgstr ""
+"Список покупок для {} - {}\n"
+"\n"
+
+#: recipes/validators.py:10
+msgid "Only a hex string is allowed."
+msgstr "Допускается только HEX-строка."
+
+#: recipes/validators.py:11
+#, python-format
+msgid "Invalid length. Must be %(length)d characters."
+msgstr "Неверная длина. Должно быть %(length)d символов."
+
+#: users/models.py:43
+msgid "subscription from"
+msgstr "подписка от"
+
+#: users/models.py:49
+msgid "subscribed to"
+msgstr "подписка на"
+
+#: users/models.py:55
+msgid "subscription"
+msgstr "подписка"
+
+#: users/models.py:56
+msgid "subscriptions"
+msgstr "подписки"
+
+#: users/models.py:65
+msgid "Subscription {} to {}"
+msgstr "подписка {} на {}"
+
+#: users/utils.py:13
+msgid "You cannot subscribe to yourself."
+msgstr "Вы не можете подписаться на себя."
+
+#: users/utils.py:22
+msgid "You have already subscribed to this user."
+msgstr "Вы уже подписаны на этого пользователя."
+
+#: users/utils.py:34
+msgid "You are not subscribed to this user."
+msgstr "Вы не подписывались на этого пользователя."

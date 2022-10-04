@@ -19,7 +19,7 @@ def check_unique_ingredient(ingredients):
         )
 
 
-def add_ingredients_to_recipe(recipe, ingredients):
+def set_ingredients_to_recipe(recipe, ingredients):
     objs = []
     for ingredient in ingredients:
         objs.append(AmountIngredient(recipe=recipe,

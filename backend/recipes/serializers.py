@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 from rest_framework import serializers
 
 from .models import AmountIngredient, Ingredient, Recipe, Tag
-from .utils import add_ingredients_to_recipe, check_unique_ingredient
+from .utils import set_ingredients_to_recipe, check_unique_ingredient
 from users.serializers import CustomUserSerializer
 
 User = get_user_model()
@@ -89,25 +89,19 @@ class RecipeSerializer(serializers.ModelSerializer):
         ingredients = validated_data.pop('amount_ingredients')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
-        add_ingredients_to_recipe(recipe, ingredients)
+        set_ingredients_to_recipe(recipe, ingredients)
         return recipe
 
     def update(self, recipe, validated_data):
-        recipe.cooking_time = validated_data.get(
-            'cooking_time', recipe.cooking_time
-        )
-        recipe.name = validated_data.get('name', recipe.name)
-        recipe.image = validated_data.get('image', recipe.image)
-        recipe.text = validated_data.get('text', recipe.text)
-
-        tags = validated_data.get('tags', recipe.tags)
-        ingredients = validated_data.get(
+        tags = validated_data.pop('tags', recipe.tags)
+        ingredients = validated_data.pop(
             'amount_ingredients', recipe.amount_ingredients
         )
+        for attr, value in validated_data.items():
+            setattr(recipe, attr, value)
         recipe.tags.set(tags)
         recipe.ingredients.clear()
-        add_ingredients_to_recipe(recipe, ingredients)
-
+        set_ingredients_to_recipe(recipe, ingredients)
         recipe.save()
         return recipe
 

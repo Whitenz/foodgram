@@ -14,12 +14,20 @@ from .utils import (add_recipe_to_linked_model, del_recipe_from_linked_model,
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet for model Tag.
+    Read only mode.
+    """
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (AllowAny,)
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet for model Ingredient.
+    Read only mode. Allow filters ingredient by name.
+    """
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (AllowAny,)
@@ -28,6 +36,13 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for model Recipe.
+    Supports methods GET, POST, PATCH, DELETE. Allow filters recipe by tags,
+     field is_favorited and is_in_shopping_cart. Add action methods for add/del
+     recipe to favorite list and shopping cart. Add action method for download
+     shopping list for current user.
+    """
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = (IsAuthorOrReadOnly,)
@@ -44,6 +59,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             permission_classes=(IsAuthenticated,),
             serializer_class=ShortRecipeSerializer)
     def favorite(self, request, pk=None):
+        """Action method for add/del recipe to favorite for current user."""
         if request.method == 'POST':
             return add_recipe_to_linked_model(
                 recipe=self.get_object(),
@@ -62,6 +78,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
             permission_classes=(IsAuthenticated,),
             serializer_class=ShortRecipeSerializer)
     def shopping_cart(self, request, pk=None):
+        """
+        Action method for add/del recipe to shopping cart for
+         current user.
+        """
         if request.method == 'POST':
             return add_recipe_to_linked_model(
                 recipe=self.get_object(),
@@ -77,4 +97,5 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, permission_classes=(IsAuthenticated,))
     def download_shopping_cart(self, request):
+        """Method for download shopping list in a txt file."""
         return get_data_for_shopping_list(user=request.user)

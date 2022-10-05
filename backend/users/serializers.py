@@ -8,6 +8,10 @@ User = get_user_model()
 
 
 class CustomUserSerializer(UserSerializer):
+    """
+    Serializer for User model.
+    Add method for check subscription to another user.
+    """
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta:

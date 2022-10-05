@@ -12,6 +12,7 @@ from .models import AmountIngredient
 
 
 def check_unique_ingredient(ingredients):
+    """Checks that the ingredients are not repeated in the recipe."""
     list_ingredients = [ingredient.get('id') for ingredient in ingredients]
     if len(list_ingredients) != len(set(list_ingredients)):
         raise serializers.ValidationError(
@@ -20,6 +21,7 @@ def check_unique_ingredient(ingredients):
 
 
 def set_ingredients_to_recipe(recipe, ingredients):
+    """Set ingredients to recipe for POST and PATCH methods."""
     objs = []
     for ingredient in ingredients:
         objs.append(AmountIngredient(recipe=recipe,
@@ -29,6 +31,7 @@ def set_ingredients_to_recipe(recipe, ingredients):
 
 
 def add_recipe_to_linked_model(recipe, linked_model, user, serializer):
+    """Add recipe to linked model, for example, favorite or cart."""
     obj, created = linked_model.objects.get_or_create(user=user,
                                                       recipe=recipe)
     if not created:
@@ -40,6 +43,7 @@ def add_recipe_to_linked_model(recipe, linked_model, user, serializer):
 
 
 def del_recipe_from_linked_model(recipe, linked_model, user):
+    """Del recipe from linked model, for example, favorite or cart."""
     try:
         obj = linked_model.objects.get(user=user, recipe=recipe)
     except ObjectDoesNotExist:
@@ -52,6 +56,7 @@ def del_recipe_from_linked_model(recipe, linked_model, user):
 
 
 def get_data_for_shopping_list(user):
+    """Return txt file with shopping list for currents user."""
     ingredients = AmountIngredient.objects.filter(recipe__cart__user=user)
     shopping_list = ingredients.values(
         'ingredient__name',

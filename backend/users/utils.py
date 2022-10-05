@@ -1,3 +1,5 @@
+"""Module for additional methods used in the Users application."""
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status
@@ -8,6 +10,7 @@ from .models import Subscription
 
 
 def add_subscribe_to_user(user_from, user_to, serializer):
+    """Add subscription from current user to another."""
     if user_from == user_to:
         raise ValidationError(
             {'errors': _('You cannot subscribe to yourself.')}
@@ -26,6 +29,7 @@ def add_subscribe_to_user(user_from, user_to, serializer):
 
 
 def del_subscribe_to_user(user_from, user_to):
+    """Del subscription from current user to another."""
     try:
         subscription = Subscription.objects.get(user_from=user_from,
                                                 user_to=user_to)

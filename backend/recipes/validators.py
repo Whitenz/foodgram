@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class HexValidator:
+    """HEX-validator for check color in Tag model."""
     messages = {
         'invalid': _("Only a hex string is allowed."),
         'length': _("Invalid length. Must be %(length)d characters."),

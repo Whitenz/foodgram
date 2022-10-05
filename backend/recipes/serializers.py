@@ -14,6 +14,10 @@ User = get_user_model()
 
 
 class Base64ImageField(serializers.ImageField):
+    """
+    Serializer for recipe image field.
+    Get image from request in base64 encoding and then saves to image file.
+    """
     def to_internal_value(self, data):
         if isinstance(data, str) and data.startswith('data:image'):
             user = self.context['request'].user
@@ -26,18 +30,25 @@ class Base64ImageField(serializers.ImageField):
 
 
 class TagSerializer(serializers.ModelSerializer):
+    """Serializer for Tag model."""
     class Meta:
         model = Tag
         fields = ('id', 'name', 'color', 'slug')
 
 
 class IngredientSerializer(serializers.ModelSerializer):
+    """Serializer for Ingredient model."""
     class Meta:
         model = Ingredient
         fields = ('id', 'name', 'measurement_unit')
 
 
 class AmountIngredientSerializer(serializers.ModelSerializer):
+    """
+    Serializer for AmountIngredient model.
+    Get ingredient id and its amount with POST request for create recipe.
+    For GET request return ingredient id, name, amount and measurement unit.
+    """
     id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
@@ -55,6 +66,13 @@ class AmountIngredientSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Recipe model.
+    In POST request get ingredient tags, ingredients with amount, name, text
+    description, cooking time and image for create new recipe. Ingredients in
+    should be unique. For GET request add fields author of the recipe,
+    is_favorited and is_in_shopping_cart.
+    """
     author = CustomUserSerializer(read_only=True)
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
@@ -119,12 +137,18 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 
 class ShortRecipeSerializer(serializers.ModelSerializer):
+    """Serializer for short view info about recipe."""
     class Meta:
         model = Recipe
         fields = 'id', 'name', 'image', 'cooking_time'
 
 
 class RecipeSubscriptionSerializer(CustomUserSerializer):
+    """
+    Serializer for view subscriptions of the current user.
+    Method get_recipes allows limit recipes for views by query parameter
+     recipes_limit, get_recipes_count returns  the number of author's recipes.
+    """
     recipes = serializers.SerializerMethodField()
     recipes_count = serializers.SerializerMethodField()
 

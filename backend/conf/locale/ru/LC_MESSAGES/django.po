@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-03 23:22+0500\n"
+"POT-Creation-Date: 2022-10-05 19:59+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,46 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: recipes/apps.py:8 recipes/models.py:118
+msgid "recipes"
+msgstr "рецепты"
+
+#: recipes/management/commands/populate_db.py:14
+msgid "Fills Ingredient table from a csv file"
+msgstr "Заполняет таблицу Ingredient данными из csv-файла"
+
+#: recipes/management/commands/populate_db.py:16
+msgid "Looking for a file with data to upload..."
+msgstr "Поиск файла с данными для загрузки..."
+
+#: recipes/management/commands/populate_db.py:17
+msgid "The following path is set: "
+msgstr "Установлен следующий путь к файлу: "
+
+#: recipes/management/commands/populate_db.py:18
+msgid "The data file for database does not exist"
+msgstr "Файл с данными для БД не найден"
+
+#: recipes/management/commands/populate_db.py:19
+msgid "The data in the table already exists"
+msgstr "Данные в таблице уже существуют"
+
+#: recipes/management/commands/populate_db.py:20
+msgid "Loading data into the table \"Ingredient\""
+msgstr "Загрузка данных в таблицу \"Ingredient\""
+
+#: recipes/management/commands/populate_db.py:21
+msgid "Number of fields in the file does not match"
+msgstr "Количество полей в файле не совпадает с таблицей"
+
+#: recipes/management/commands/populate_db.py:22
+msgid "Successful data upload"
+msgstr "Данные загружены успешно"
+
+#: recipes/management/commands/populate_db.py:23
+msgid "Entities in the table after loading - {}"
+msgstr "Записей в таблице после загрузки - {}"
 
 #: recipes/models.py:18
 msgid "tag name"
@@ -29,7 +69,7 @@ msgstr "цвет тега"
 msgid "slug of the tag"
 msgstr "слаг тега"
 
-#: recipes/models.py:37 recipes/models.py:172
+#: recipes/models.py:37 recipes/models.py:173
 msgid "tag"
 msgstr "тег"
 
@@ -45,7 +85,7 @@ msgstr "название ингредиента"
 msgid "ingredient measurement measure"
 msgstr "единица измерения ингредиента"
 
-#: recipes/models.py:62 recipes/models.py:142
+#: recipes/models.py:62 recipes/models.py:143
 msgid "ingredient"
 msgstr "ингредиент"
 
@@ -85,43 +125,39 @@ msgstr "время приготовления в минутах"
 msgid "date of public"
 msgstr "дата публикации"
 
-#: recipes/models.py:117 recipes/models.py:136 recipes/models.py:177
+#: recipes/models.py:117 recipes/models.py:137 recipes/models.py:178
 msgid "recipe"
 msgstr "рецепт"
-
-#: recipes/models.py:118
-msgid "recipes"
-msgstr "рецепты"
 
 #: recipes/models.py:127
 msgid "number in favorites"
 msgstr "количество в избранном"
 
-#: recipes/models.py:147
+#: recipes/models.py:148
 msgid "amount of ingredient for the recipe"
 msgstr "количество ингредиентов для рецепта"
 
-#: recipes/models.py:152 recipes/models.py:153
+#: recipes/models.py:153 recipes/models.py:154
 msgid "amount of ingredients"
 msgstr "количество ингредиентов"
 
-#: recipes/models.py:182 recipes/models.py:183
+#: recipes/models.py:183 recipes/models.py:184
 msgid "tags of recipe"
 msgstr "теги рецепта"
 
-#: recipes/models.py:205
+#: recipes/models.py:206
 msgid "favorite recipes"
 msgstr "избранные рецепты"
 
-#: recipes/models.py:211 recipes/models.py:212
+#: recipes/models.py:212 recipes/models.py:213
 msgid "favorite"
 msgstr "избранное"
 
-#: recipes/models.py:234
+#: recipes/models.py:235
 msgid "user shopping cart"
 msgstr "список покупок пользователя"
 
-#: recipes/models.py:240 recipes/models.py:241
+#: recipes/models.py:241 recipes/models.py:242
 msgid "shopping cart"
 msgstr "список покупок"
 

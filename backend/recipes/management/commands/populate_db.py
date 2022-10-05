@@ -13,9 +13,11 @@ from recipes.models import Ingredient
 class Command(BaseCommand):
     help = _('Fills Ingredient table from a csv file')
     messages = {
+        'prepare_data': _('Looking for a file with data to upload...'),
+        'path_to_file': _('The following path is set: '),
+        'file_does_not_exist': _('The data file for database does not exist'),
         'already_loaded_error': _('The data in the table already exists'),
         'loading_data': _('Loading data into the table "Ingredient"'),
-        'file_does_not_exist': _('The data file for database does not exist'),
         'fields_error': _('Number of fields in the file does not match'),
         'success_loading': _('Successful data upload'),
         'count_data': _('Entities in the table after loading - {}'.format(
@@ -23,11 +25,13 @@ class Command(BaseCommand):
         ),
     }
     # set path to csv-file for populate with ingredients
-    path = settings.BASE_DIR / 'recipes/management/commands/ingredients.csv'
+    path = settings.BASE_DIR / 'ingredients.csv'
     # set how many fields in the table Ingredient
     count_fields = 2
 
     def handle(self, *args, **options):
+        self.stdout.write(self.messages.get('prepare_data'))
+        self.stdout.write(self.messages.get('path_to_file') + str(self.path))
         if not os.path.isfile(self.path):
             raise CommandError(self.messages.get('file_does_not_exist'))
         if Ingredient.objects.exists():

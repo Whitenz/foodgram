@@ -15,6 +15,11 @@ User = get_user_model()
 
 
 class CustomUserViewSet(UserViewSet):
+    """
+    ViewSet for CustomUser model.
+    Inherited from the User model of the djoser package. Add action methods
+     for subscriptions to another user and then viewing their subscriptions.
+    """
     serializer_class = CustomUserSerializer
     http_method_names = ('get', 'post', 'delete')
     pagination_class = CustomLimitPagination

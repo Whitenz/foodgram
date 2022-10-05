@@ -4,6 +4,7 @@ from .models import Ingredient, Recipe, Tag
 
 
 class IngredientFilter(filter.FilterSet):
+    """Filter for ingredients. Allow filters by name."""
     name = filter.CharFilter(field_name='name', lookup_expr='istartswith')
 
     class Meta:
@@ -12,6 +13,10 @@ class IngredientFilter(filter.FilterSet):
 
 
 class RecipeFilter(filter.FilterSet):
+    """
+    Filter for recipes. Allow filters by tags, is_favorited and
+     is_in_shopping_cart fields.
+    """
     tags = filter.ModelMultipleChoiceFilter(
         field_name='tags__slug',
         to_field_name='slug',

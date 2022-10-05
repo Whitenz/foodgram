@@ -25,7 +25,7 @@ class Command(BaseCommand):
         ),
     }
     # set path to csv-file for populate with ingredients
-    path = settings.BASE_DIR / 'ingredients.csv'
+    path = settings.BASE_DIR / 'data/ingredients.csv'
     # set how many fields in the table Ingredient
     count_fields = 2
 

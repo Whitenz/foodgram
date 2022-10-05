@@ -54,8 +54,8 @@ msgid "Successful data upload"
 msgstr "Данные загружены успешно"
 
 #: recipes/management/commands/populate_db.py:23
-msgid "Entities in the table after loading - {}"
-msgstr "Записей в таблице после загрузки - {}"
+msgid "Entities in the table after loading - "
+msgstr "Записей в таблице после загрузки - "
 
 #: recipes/models.py:18
 msgid "tag name"

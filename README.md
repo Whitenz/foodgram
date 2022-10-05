@@ -1,5 +1,11 @@
 # [Foodgram](http://whitenz.ddns.net/) - сервис рецептов вкусных блюд
 
+<details>
+    <summary>для ревью</summary>
+    login / password - review@yandex.ru / review
+</details>
+
+
 ## Особенности
 Проект Foodgram предназначен для публикации рецептов блюд с картинками. Позволяет пользователям подписываться на других
 участников сайта, добавлять понравившиеся рецепты в избранное и корзину с последующим формированием списка покупок.
@@ -144,23 +150,23 @@ sudo docker-compose up -d
 
 #### Выполнить миграции:
 ```
-sudo docker-compose exec web python manage.py migrate
+sudo docker-compose exec backend python manage.py migrate
 ```
 
 #### Собрать статику:
 ```
-sudo docker-compose exec web python manage.py collectstatic --no-input
+sudo docker-compose exec backend python manage.py collectstatic --no-input
 ```
 
 #### Создать суперпользователя:
 ```
-sudo docker-compose exec web python manage.py createsuperuser
+sudo docker-compose exec backend python manage.py createsuperuser
 
 ```
 
 #### Заполнить базу данных ингредиентами для рецептов:
 ```
-sudo docker-compose exec web python manage.py populate_db
+sudo docker-compose exec backend python manage.py populate_db
 
 ```
 

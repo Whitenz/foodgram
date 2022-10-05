@@ -20,9 +20,7 @@ class Command(BaseCommand):
         'loading_data': _('Loading data into the table "Ingredient"'),
         'fields_error': _('Number of fields in the file does not match'),
         'success_loading': _('Successful data upload'),
-        'count_data': _('Entities in the table after loading - {}'.format(
-            Ingredient.objects.all().count())
-        ),
+        'count_data': _('Entities in the table after loading - '),
     }
     # set path to csv-file for populate with ingredients
     path = settings.BASE_DIR / 'data/ingredients.csv'
@@ -53,5 +51,5 @@ class Command(BaseCommand):
             self.messages.get('success_loading'))
         )
         self.stdout.write(self.style.SUCCESS(
-            self.messages.get('count_data'))
+            self.messages.get('count_data') + str(Ingredient.objects.count()))
         )

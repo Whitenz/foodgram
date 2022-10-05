@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 from rest_framework import serializers
 
 from .models import AmountIngredient, Ingredient, Recipe, Tag
-from .utils import set_ingredients_to_recipe, check_unique_ingredient
+from .utils import check_unique_ingredient, set_ingredients_to_recipe
 from users.serializers import CustomUserSerializer
 
 User = get_user_model()

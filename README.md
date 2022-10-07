@@ -1,3 +1,5 @@
+![Django-app workflow](https://github.com/Whitenz/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
+
 # [Foodgram](http://whitenz.ddns.net/) - сервис рецептов вкусных блюд
 
 <details>
@@ -63,7 +65,7 @@
 Список покупок скачивается в формате `.txt`.
 При скачивании списка покупок ингредиенты в результирующем суммируются.
 ### Фильтрация по тегам
-При нажатии на название тега выводится список рецептов, отмеченных этим тегом. Фильтрация может проводится по нескольким тегам в комбинации «или»: если выбраны несколько тегов — на странице будут показаны рецепты, которые отмечены хотя бы одним из этих тегов.
+При нажатии на название тега выводится список рецептов, отмеченных этим тегом. Фильтрация может проводиться по нескольким тегам в комбинации «или»: если выбраны несколько тегов — на странице будут показаны рецепты, которые отмечены хотя бы одним из этих тегов.
 При фильтрации на странице пользователя фильтруются только рецепты выбранного пользователя. 
 При фильтрации на странице избранного фильтруются только избранные рецепты. 
 
@@ -134,13 +136,14 @@ git clone https://github.com/Whitenz/foodgram-project-react.git && cd foodgram-p
 
 #### Создать файл .env с переменными окружения:
 ```
-SECRET_KEY=YOUR_SECRET_KEY
-DB_ENGINE=django.db.backends.postgresql
-DB_NAME=postgres
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres # задайте свой пароль
-DB_HOST=db
-DB_PORT=5432
+touch .env &&
+echo SECRET_KEY=YOUR_SECRET_KEY > .env &&
+echo DB_ENGINE=django.db.backends.postgresql >> .env &&
+echo DB_NAME=postgres >> .env &&
+echo POSTGRES_USER=postgres >> .env &&
+echo POSTGRES_PASSWORD=postgres >> .env &&
+echo DB_HOST=db >> .env &&
+echo DB_PORT=5432 >> .env
 ```
 
 #### Создать образы и запустить контейнеры:
@@ -175,8 +178,106 @@ sudo docker-compose exec backend python manage.py populate_db
 http://localhost/admin/
 ```
 
+## Эндпоинты API
+- Пользователи
+```
+/api/users/ - GET, POST
+/api/users/{id}/ - GET
+/api/users/me/ - GET
+/api/users/set_password/ - POST
+/api/auth/token/login/ - POST
+/api/auth/token/logout/ - POST
+```
+- Теги
+```
+/api/tags/- GET
+/api/tags/{id}/ - GET
+```
+- Рецепты
+```
+/api/recipes/ - GET, POST
+/api/recipes/{id}/ - GET, PATCH, DEL
+```
+- Список покупок
+```
+/api/recipes/download_shopping_cart/ - GET
+/api/recipes/{id}/shopping_cart/ - POST, DEL
+```
+- Избранное
+```
+/api/recipes/{id}/favorite/ - POST, DEL
+```
+- Подписки
+```
+/api/users/subscriptions/ - GET
+/api/users/{id}/subscribe/ - POST, DEL
+```
+- Ингредиенты
+```
+/api/ingredients/ - GET
+/api/ingredients/{id}/ - GET
+```
+
+Подробная документаци по API доступна после запуска проекта - http://localhost/api/docs/
+
+
 ✨ Поздравляю ✨ <br>
 Приложение запущено и готово к работе.
+
+### Пример запроса к API
+
+Информация о рецепте
+```
+curl -X GET 'http://localhost/api/recipes/1/'
+```
+Ответ
+```
+{
+ "id": 1,
+ "tags": [
+  {
+   "id": 1,
+   "name": "завтрак",
+   "color": "#dbab27",
+   "slug": "breakfast"
+  }
+ ],
+ "author": {
+  "username": "veronika",
+  "first_name": "Вероника",
+  "last_name": "Петухова",
+  "id": 4,
+  "email": "veronika@ya.ru",
+  "is_subscribed": false
+ },
+ "ingredients": [
+  {
+   "id": 2182,
+   "name": "яйца куриные",
+   "measurement_unit": "г",
+   "amount": 200
+  },
+  {
+   "id": 1342,
+   "name": "помидоры",
+   "measurement_unit": "г",
+   "amount": 100
+  },
+  {
+   "id": 1685,
+   "name": "соль",
+   "measurement_unit": "г",
+   "amount": 15
+  }
+ ],
+ "is_favorited": false,
+ "is_in_shopping_cart": false,
+ "name": "яичница с помидором",
+ "image": "http://whitenz.ddns.net/media/recipes/images/veronika_recipe.jpeg",
+ "text": "простой рецепт яичницы с помидором",
+ "cooking_time": 10
+}
+```
 
 ## Стек технологий
 - Django

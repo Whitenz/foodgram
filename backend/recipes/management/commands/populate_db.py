@@ -22,10 +22,8 @@ class Command(BaseCommand):
         'success_loading': _('Successful data upload'),
         'count_data': _('Entities in the table after loading - '),
     }
-    # set path to csv-file for populate with ingredients
     path = settings.BASE_DIR / 'data/ingredients.csv'
-    # set how many fields in the table Ingredient
-    count_fields = 2
+    count_fields = 2  # set how many fields in the table Ingredient
 
     def handle(self, *args, **options):
         self.stdout.write(self.messages.get('prepare_data'))

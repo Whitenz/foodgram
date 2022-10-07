@@ -11,7 +11,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'localhost',
+    '51.250.102.156'
+    'whitenz.ddns.net',
+]
 
 
 INSTALLED_APPS = [

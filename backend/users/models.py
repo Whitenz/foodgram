@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from rest_framework.authtoken.models import Token
 
 
 class CustomUser(AbstractUser):
@@ -63,3 +64,11 @@ class Subscription(models.Model):
 
     def __str__(self) -> str:
         return _('Subscription {} to {}').format(self.user_from, self.user_to)
+
+
+class CustomTokenProxy(Token):
+    class Meta:
+        proxy = True
+        verbose_name = _('token')
+        verbose_name_plural = _('tokens')
+        app_label = 'authtoken'

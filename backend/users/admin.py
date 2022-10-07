@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from rest_framework.authtoken.models import TokenProxy
 
-from .models import Subscription
+from .models import CustomTokenProxy, Subscription
 
 User = get_user_model()
 
@@ -22,3 +23,5 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
+admin.site.register(CustomTokenProxy)
+admin.site.unregister(TokenProxy)

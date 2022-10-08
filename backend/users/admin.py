@@ -11,12 +11,12 @@ User = get_user_model()
 
 class CartInline(admin.TabularInline):
     model = Cart
-    extra = 1
+    extra = 0
 
 
 class FavoriteInline(admin.StackedInline):
     model = Favorite
-    extra = 1
+    extra = 0
 
 
 @admin.register(User)
@@ -41,6 +41,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
 @admin.register(CustomTokenProxy)
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('key', 'user', 'created')
+    readonly_fields = ('user',)
 
 
 admin.site.unregister(TokenProxy)

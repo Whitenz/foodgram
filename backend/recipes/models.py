@@ -124,6 +124,7 @@ class Recipe(models.Model):
     def favorites_counter(self):
         """Return how many times a recipe has benn added to favorites."""
         return self.favorites.count()
+
     favorites_counter.fget.short_description = _('number in favorites')
 
 
@@ -189,6 +190,9 @@ class TagRecipe(models.Model):
             ),
         )
 
+    def __str__(self):
+        return f'{self.recipe}: {self.tag.name}'
+
 
 class Favorite(models.Model):
     """
@@ -218,6 +222,9 @@ class Favorite(models.Model):
             ),
         )
 
+    def __str__(self):
+        return f'{self.user}: {self.recipe}'
+
 
 class Cart(models.Model):
     """
@@ -246,3 +253,6 @@ class Cart(models.Model):
                 name='unique_cart_recipe'
             ),
         )
+
+    def __str__(self):
+        return f'{self.user}: {self.recipe}'
